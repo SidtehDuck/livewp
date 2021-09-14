@@ -1,47 +1,64 @@
-// ------------------------------------------------
-// BASIC SETUP
-// ------------------------------------------------
 
-// Create an empty scene
+var container = document.getElementById('container')
+
+var vertexHeight = 15000,
+  planeDefinition = 100,
+  planeSize = 1245000,
+  totalObjects = 1,
+  background = "#002135",
+  meshColor = "#005e97";
+
+var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 400000)
+camera.position.z = 10000;
+camera.position.y = 10000;
+
 var scene = new THREE.Scene();
+scene.fog = new THREE.Fog(background, 1, 300000);
 
-// Create a basic perspective camera
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-camera.position.z = 4;
+var planeGeo = new THREE.PlaneGeometry(planeSize, planeSize, planeDefinition, planeDefinition);
+var plane = new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({
+  color: meshColor,
+  wireframe: true
+}));
+plane.rotation.x -= Math.PI * .5;
 
-// Create a renderer with Antialiasing
-var renderer = new THREE.WebGLRenderer({antialias:true});
+scene.add(plane);
 
-// Configure renderer clear color
-renderer.setClearColor("#000000");
+var renderer = new THREE.WebGLRenderer({ alpha: false });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(background, 1);
 
-// Configure renderer size
-renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild(renderer.domElement);
 
-// Append Renderer to DOM
-document.body.appendChild( renderer.domElement );
 
-// ------------------------------------------------
-// FUN STARTS HERE
-// ------------------------------------------------
+updatePlane();
 
-// Create a Cube Mesh with basic material
-var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { color: "#433F81" } );
-var cube = new THREE.Mesh( geometry, material );
-
-// Add cube to Scene
-scene.add( cube );
-
-// Render Loop
-var render = function () {
-  requestAnimationFrame( render );
-
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-
-  // Render the scene
-  renderer.render(scene, camera);
+function updatePlane() {
+  for (var i = 0; i < planeGeo.vertices.length; i++) {
+    planeGeo.vertices[i].z += Math.random() * vertexHeight - vertexHeight;
+    planeGeo.vertices[i]._myZ = planeGeo.vertices[i].z
+  }
 };
 
 render();
+
+var count = 0
+function render() {
+  requestAnimationFrame(render);
+  // camera.position.z -= 150;
+  var x = camera.position.x;
+  var z = camera.position.z;
+  camera.position.x = x * Math.cos(0.001) + z * Math.sin(0.001) - 10;
+  camera.position.z = z * Math.cos(0.001) - x * Math.sin(0.001) - 10;
+  camera.lookAt(new THREE.Vector3(0, 8000, 0))
+
+  for (var i = 0; i < planeGeo.vertices.length; i++) {
+    var z = +planeGeo.vertices[i].z;
+    planeGeo.vertices[i].z = Math.sin((i + count * 0.00002)) * (planeGeo.vertices[i]._myZ - (planeGeo.vertices[i]._myZ * 0.6))
+    plane.geometry.verticesNeedUpdate = true;
+
+    count += 0.1
+  }
+
+  renderer.render(scene, camera);
+}
