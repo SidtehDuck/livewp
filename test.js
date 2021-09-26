@@ -19,7 +19,7 @@ var camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHei
 
 const loader = new GLTFLoader();
 
-loader.load( './RubberDuck.glb', function ( gltf ) {
+loader.load( './duckytex.glb', function ( gltf ) {
 
   const duck = new THREE.LineBasicMaterial( {
     color: 0xffffff,
