@@ -1,0 +1,27 @@
+{
+  "name": "livewp",
+  "version": "1.0.0",
+  "description": "Fiddling around with three.js to see if I can come up with a live wallpaper for my personal site.",
+  "main": "script.js",
+  "scripts": {
+    "start": "snowpack dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SidtehDuck/livewp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SidtehDuck/livewp/issues"
+  },
+  "homepage": "https://github.com/SidtehDuck/livewp#readme",
+  "devDependencies": {
+    "snowpack": "^3.8.8"
+  },
+  "dependencies": {
+    "three": "^0.132.2"
+  }
+}
