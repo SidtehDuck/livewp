@@ -44,7 +44,9 @@ loader.load( './duckytex.glb', function ( gltf ) {
 
 var scene = new THREE.Scene();
 scene.fog = new THREE.Fog(background, 1, 300000);
-
+var light1 = new THREE.PointLight(0x00ff00,1, 300);
+light1.position.set(0, 10, 30);
+ scene.add(light1);
 var planeGeo = new THREE.PlaneGeometry(planeSize, planeSize, planeDefinition, planeDefinition);
 var plane = new THREE.Mesh(planeGeo, new THREE.MeshBasicMaterial({
   color: meshColor,
